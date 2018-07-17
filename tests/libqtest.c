@@ -40,6 +40,7 @@ struct QTestState
     int fd;
     int qmp_fd;
     bool irq_level[MAX_IRQ];
+    bool irq_latch[MAX_IRQ];
     GString *rx;
     pid_t qemu_pid;  /* our child QEMU process */
     bool big_endian;
@@ -233,6 +234,7 @@ QTestState *qtest_init_without_qmp_handshake(bool use_oob,
     s->rx = g_string_new("");
     for (i = 0; i < MAX_IRQ; i++) {
         s->irq_level[i] = false;
+        s->irq_latch[i] = false;
     }
 
     if (getenv("QTEST_STOP")) {
@@ -386,6 +388,7 @@ redo:
 
         if (strcmp(words[1], "raise") == 0) {
             s->irq_level[irq] = true;
+            s->irq_latch[irq] = true;
         } else {
             s->irq_level[irq] = false;
         }
@@ -676,6 +679,22 @@ bool qtest_get_irq(QTestState *s, int num)
     qtest_inb(s, 0);
 
     return s->irq_level[num];
+}
+
+bool qtest_get_irq_latched(QTestState *s, int num)
+{
+    g_assert_cmpint(num, <, MAX_IRQ);
+
+    /* dummy operation in order to make sure irq is up to date */
+    qtest_inb(s, 0);
+
+    return s->irq_latch[num];
+}
+
+void qtest_clear_irq_latch(QTestState *s, int num)
+{
+    g_assert_cmpint(num, <, MAX_IRQ);
+    s->irq_latch[num] = false;
 }
 
 static int64_t qtest_clock_rsp(QTestState *s)

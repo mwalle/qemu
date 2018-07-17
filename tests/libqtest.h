@@ -192,6 +192,24 @@ char *qtest_hmpv(QTestState *s, const char *fmt, va_list ap);
 bool qtest_get_irq(QTestState *s, int num);
 
 /**
+ * qtest_get_irq_latched:
+ * @s: #QTestState instance to operate on.
+ * @num: Interrupt to observe.
+ *
+ * Returns: The latched state of the @num interrupt.
+ */
+bool qtest_get_irq_latched(QTestState *s, int num);
+
+/**
+ * qtest_clear_irq_latch:
+ * @s: #QTestState instance to operate on.
+ * @num: Interrupt to operate on.
+ *
+ * Clears the latch of the @num interrupt.
+ */
+void qtest_clear_irq_latch(QTestState *s, int num);
+
+/**
  * qtest_irq_intercept_in:
  * @s: #QTestState instance to operate on.
  * @string: QOM path of a device.
@@ -635,6 +653,28 @@ char *hmp(const char *fmt, ...) GCC_FMT_ATTR(1, 2);
 static inline bool get_irq(int num)
 {
     return qtest_get_irq(global_qtest, num);
+}
+
+/**
+ * get_irq_latched:
+ * @num: Interrupt to observe.
+ *
+ * Returns: The latched level of the @num interrupt.
+ */
+static inline bool get_irq_latched(int num)
+{
+    return qtest_get_irq_latched(global_qtest, num);
+}
+
+/**
+ * clear_irq_latch:
+ * @num: Interrupt to operate on.
+ *
+ * Clears the latch of the @num interrupt.
+ */
+static inline void clear_irq_latch(int num)
+{
+    return qtest_clear_irq_latch(global_qtest, num);
 }
 
 /**
