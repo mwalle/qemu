@@ -9,6 +9,8 @@ static inline DeviceState *lm32_pic_init(qemu_irq cpu_irq)
     SysBusDevice *d;
 
     dev = qdev_create(NULL, "lm32-pic");
+    object_property_add_child(qdev_get_machine(), "lm32-pic", OBJECT(dev),
+            NULL);
     qdev_init_nofail(dev);
     d = SYS_BUS_DEVICE(dev);
     sysbus_connect_irq(d, 0, cpu_irq);

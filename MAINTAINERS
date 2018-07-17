@@ -171,6 +171,7 @@ F: hw/*/milkymist-*
 F: include/hw/char/lm32_juart.h
 F: include/hw/lm32/
 F: tests/tcg/lm32/
+F: tests/milkymist-*
 
 M68K
 M: Laurent Vivier <laurent@vivier.eu>

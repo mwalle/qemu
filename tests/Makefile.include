@@ -406,6 +406,8 @@ check-qtest-s390x-y += tests/virtio-console-test$(EXESUF)
 check-qtest-s390x-y += tests/virtio-serial-test$(EXESUF)
 check-qtest-s390x-y += tests/cpu-plug-test$(EXESUF)
 
+check-qtest-lm32-y = tests/milkymist-pfpu-test$(EXESUF)
+
 check-qtest-generic-y += tests/machine-none-test$(EXESUF)
 check-qtest-generic-y += tests/qom-test$(EXESUF)
 check-qtest-generic-y += tests/test-hmp$(EXESUF)
@@ -867,6 +869,8 @@ tests/migration/initrd-stress.img: tests/migration/stress$(EXESUF)
 	(cd $(INITRD_WORK_DIR) && (find | cpio --quiet -o -H newc | gzip -9)) > $@
 	rm $(INITRD_WORK_DIR)/init
 	rmdir $(INITRD_WORK_DIR)
+
+tests/milkymist-pfpu-test$(EXESUF): tests/milkymist-pfpu-test.o
 
 ifeq ($(CONFIG_POSIX),y)
 LIBS += -lutil
